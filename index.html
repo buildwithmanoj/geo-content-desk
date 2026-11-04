@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8">
+<title>GEO Content Desk | Interactive demo</title>
+<meta name="description" content="Interactive demo of GEO Content Desk, a workspace for writing, scoring and publishing content that answer engines cite. Fictional clients, no login, no API.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0A0C">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A0A0C'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%2300E676' stroke-width='3'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GEO Content Desk">
+<meta property="og:title" content="GEO Content Desk | Interactive demo">
+<meta property="og:description" content="Write, score and publish content that answer engines cite. Click through a fully working demo, no login needed.">
+<meta property="og:url" content="https://YOUR-PROJECT.vercel.app/">
+<meta property="og:image" content="https://YOUR-PROJECT.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="GEO Content Desk interactive demo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GEO Content Desk | Interactive demo">
+<meta name="twitter:description" content="Write, score and publish content that answer engines cite. Click through a fully working demo, no login needed.">
+<meta name="twitter:image" content="https://YOUR-PROJECT.vercel.app/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head>
+<body>
+<style>
+/* Layout: forest sidebar, cream canvas, sticky page header, three-column editor. Single committed light look. */
+:root{
+  --bg:#0A0A0C; --surface:#1E2025; --zinc:#1E2025; --ink:#F4F4F5; --green:#00E676; --mint:#10B981; --amber:#F59E0B; --coral:#F59E0B; --red:#EF4444;
+  --ink2:rgba(244,244,245,.72); --ink3:rgba(244,244,245,.6); --ink4:rgba(244,244,245,.42);
+  --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16); --tint:rgba(255,255,255,.03); --tint2:rgba(255,255,255,.06);
+  --green-bg:rgba(0,230,118,.12); --red-bg:rgba(239,68,68,.12);
+  --font:'Montserrat',Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 13px/1.5 var(--font);-webkit-font-smoothing:antialiased;padding-block:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit;font-size:inherit}
+input,textarea,select{font-family:inherit;color:var(--ink)}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+.app{display:flex;min-height:100vh}
+
+/* sidebar */
+.sb{width:248px;flex:none;background:var(--zinc);color:var(--ink);display:flex;flex-direction:column;padding:24px 16px;position:sticky;top:0;height:100vh;z-index:40;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:10px;padding:0 8px 22px}
+.mark{width:28px;height:28px;flex:none;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.logo b{display:block;font-size:12px;letter-spacing:.06em;line-height:1.15}
+.logo span{display:block;font-size:10px;opacity:.65;letter-spacing:.04em}
+.sbl{padding:0 8px 8px;font-size:10px;font-weight:700;letter-spacing:.14em;opacity:.5;text-transform:uppercase}
+.ws{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;padding:10px 12px;margin-bottom:20px;border:1px solid rgba(255,255,255,.22);border-radius:8px;font-size:13px;font-weight:600}
+.ws:hover{border-color:rgba(255,255,255,.5)}
+.ws small{font-size:9px;opacity:.6;letter-spacing:.08em}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nsec{padding:16px 12px 6px;font-size:10px;font-weight:700;letter-spacing:.14em;opacity:.45;text-transform:uppercase}
+.ni{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:9px 12px;border-radius:8px;font-size:13px;font-weight:400;color:#fff}
+.ni:hover{background:rgba(255,255,255,.12)}
+.ni.on{background:rgba(255,255,255,.16);font-weight:600}
+.ni svg{flex:none;width:16px;height:16px;opacity:.6}
+.ni.on svg{opacity:1}
+.ni span{flex:1}
+.ni em{font-style:normal;font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;background:rgba(255,255,255,.16)}
+.cred{margin-top:auto;padding:16px 12px 0;border-top:1px solid rgba(255,255,255,.14)}
+.cred b{display:block;font-size:11px;font-weight:600}
+.cred .cr{height:6px;border-radius:4px;background:rgba(255,255,255,.18);margin:10px 0 6px;overflow:hidden}
+.cred .cr i{display:block;height:100%;width:62%;background:var(--coral)}
+.cred span{font-size:11px;opacity:.7}
+
+/* main */
+.mc{flex:1;min-width:0;display:flex;flex-direction:column}
+.mbar{display:none;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.mbar button{font-size:20px;line-height:1;padding:2px 6px}
+.mbar b{font-size:13px}
+.hd{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:32px max(40px,env(safe-area-inset-right,0px)) 24px max(40px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.hd>div:first-child{min-width:0}
+.eb{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--green);margin-bottom:8px;text-transform:uppercase}
+.hd h1{font-size:28px;font-weight:700;line-height:1.15;letter-spacing:-.4px;text-wrap:balance}
+.hd p{margin-top:8px;font-size:13px;line-height:1.5;max-width:64ch;color:var(--ink2)}
+.hb{display:flex;gap:10px;flex:none;flex-wrap:wrap}
+.bd{flex:1;padding:32px max(40px,env(safe-area-inset-right,0px)) 72px max(40px,env(safe-area-inset-left,0px))}
+
+/* primitives */
+.btn{white-space:nowrap;padding:11px 18px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid transparent;transition:background .12s,transform .12s}
+.btn-p{background:var(--green);color:#0A0A0C}
+.btn-p:hover{background:#00C864}
+.btn-o{border-color:var(--line2);color:var(--ink)}
+.btn-o:hover{background:var(--tint2)}
+.btn-s{padding:8px 13px;font-size:11px;border-radius:7px}
+.lnk{font-size:11px;font-weight:600;color:var(--green)}
+.lnk:hover{text-decoration:underline}
+.card{padding:24px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.card.pad32{padding:32px}
+.dark{background:var(--zinc);color:var(--ink);border-color:var(--line2)}
+.cap{font-size:10px;font-weight:700;letter-spacing:.13em;color:var(--green);text-transform:uppercase}
+.dark .cap{color:#fff;opacity:.75}
+.lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--green);margin-bottom:8px;text-transform:uppercase}
+.inp,.sel,.txa{width:100%;padding:12px 14px;border:1px solid var(--line2);border-radius:8px;font-size:13px;font-weight:500;background:var(--bg)}
+.inp{font-size:14px;font-weight:400;padding:13px 14px}
+.txa{font-size:14px;font-weight:400;line-height:1.55;resize:vertical;padding:14px}
+.hint{margin-top:8px;font-size:11px;color:var(--ink3)}
+.stack{display:flex;flex-direction:column}
+.g24{gap:24px}.g16{gap:16px}.g12{gap:12px}
+.row{display:flex;align-items:center;gap:12px}
+.wrap{flex-wrap:wrap}
+.sp{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+h2.t16{font-size:16px;font-weight:600}
+h2.t18{font-size:18px;font-weight:600}
+h2.t22{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.seg{display:flex;gap:6px;padding:5px;border:1px solid var(--line);border-radius:10px;width:fit-content;max-width:100%;background:var(--surface);overflow-x:auto}
+.seg button{white-space:nowrap;flex:none;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;color:var(--ink2)}
+.seg button.on{background:var(--green);color:#0A0A0C}
+.seg.sm{padding:3px;border-radius:8px;border-color:var(--line)}
+.seg.sm button{padding:6px 12px;font-size:11px}
+.chip{padding:7px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid var(--line2);color:var(--ink)}
+.chip.on{background:var(--green);color:#0A0A0C;border-color:var(--green)}
+.tgb{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:8px;font-size:12px;font-weight:600;border:1px solid var(--line);text-align:left}
+.tgb.on{background:var(--tint2);border-color:rgba(244,244,245,.4)}
+.bx{width:14px;height:14px;flex:none;border-radius:4px;border:1px solid rgba(244,244,245,.3)}
+.on>.bx,.bx.on{background:var(--ink)}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:4px 9px;border-radius:20px;border:1px solid rgba(244,244,245,.18);white-space:nowrap}
+.pill.ok{background:var(--green-bg)}.pill.warn{background:var(--red-bg)}.pill.mut{background:var(--tint2)}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;padding:3px 7px;border-radius:5px;background:rgba(0,230,118,.12);color:var(--green);text-transform:uppercase}
+.tag.red{background:var(--red-bg);color:var(--ink)}
+.tag.mut{background:var(--tint2);color:var(--ink)}
+.bar{height:6px;border-radius:4px;background:rgba(244,244,245,.1);overflow:hidden}
+.bar i{display:block;height:100%}
+.sg{display:grid;gap:24px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.split{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+.split2{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.side{grid-template-columns:minmax(0,1fr) 340px;gap:32px;align-items:start}
+.side.s360{grid-template-columns:minmax(0,1fr) 360px}
+.side.s300{grid-template-columns:minmax(0,1fr) 300px}
+.stat{padding:24px}
+.stat .v{display:flex;align-items:baseline;gap:8px;margin-top:16px;font-size:34px;font-weight:700;line-height:1;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:12px;font-weight:600;color:var(--ink3);letter-spacing:0}
+.stat .d{margin-top:16px;font-size:11px;color:var(--ink3)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.tw>.in{min-width:680px}
+.th,.tr{display:grid;gap:16px;align-items:center;padding:15px 24px}
+.th{background:var(--tint);padding-block:14px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--green);text-transform:uppercase}
+.tr{border-top:1px solid rgba(244,244,245,.08);font-variant-numeric:tabular-nums}
+.tr:hover{background:rgba(244,244,245,.03)}
+.tr .n{font-size:13px;font-weight:600;line-height:1.4}
+.muted{color:var(--ink2)}
+.small{font-size:11px;color:var(--ink3)}
+.mm{font-variant-numeric:tabular-nums}
+
+/* engines */
+.eng{display:grid;grid-template-columns:130px 1fr 48px;align-items:center;gap:16px;font-size:12px;font-weight:600}
+.eng .bar{height:10px;border-radius:6px;background:rgba(244,244,245,.09)}
+.gap{display:flex;align-items:flex-start;gap:12px;padding-bottom:12px;border-bottom:1px solid rgba(244,244,245,.09)}
+.gap:last-child{border-bottom:0;padding-bottom:0}
+
+/* wizard */
+.wiz{display:grid;grid-template-columns:236px minmax(0,1fr);gap:40px;align-items:start}
+.wizin{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:32px;align-items:start}
+.stp{display:flex;align-items:flex-start;gap:12px;text-align:left;padding:12px;border-radius:9px;width:100%}
+.stp.on{background:var(--tint2)}
+.stp i{font-style:normal;width:22px;height:22px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:1px solid rgba(244,244,245,.2)}
+.stp.on i{background:var(--green);color:#0A0A0C}
+.stp b{display:block;font-size:12px;font-weight:600;line-height:1.35}
+.stp span{display:block;margin-top:4px;font-size:11px;color:var(--ink3)}
+.big{font-size:44px;font-weight:700;line-height:1;letter-spacing:-1.5px;color:var(--mint);font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:11px}
+.kv span:first-child{color:var(--ink2)}
+.kv span:last-child{font-weight:600;text-align:right}
+.ent{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid rgba(244,244,245,.14);border-radius:8px}
+.drop{padding:22px;border:1px dashed var(--line2);border-radius:8px;text-align:center;font-size:12px;color:var(--ink2);background:var(--tint)}
+.dial{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:10px}
+.dial span:last-child{font-weight:400;color:var(--ink3)}
+input[type=range]{width:100%;accent-color:var(--ink);height:18px;margin:0}
+.rv{display:grid;grid-template-columns:150px 1fr;gap:16px;padding-bottom:16px;border-bottom:1px solid rgba(244,244,245,.09)}
+.rv b{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--green)}
+.rv span{font-size:13px;line-height:1.5}
+.nav2{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:24px;border-top:1px solid rgba(244,244,245,.1)}
+
+/* chat */
+.chat{border:1px solid var(--line);border-radius:12px;background:var(--surface);display:flex;flex-direction:column;min-height:520px}
+.msgs{flex:1;padding:28px;display:flex;flex-direction:column;gap:20px}
+.m{display:flex}
+.m.u{justify-content:flex-end}
+.m div{max-width:78%;padding:14px 16px;border-radius:12px;font-size:13px;line-height:1.55;background:var(--bg);border:1px solid rgba(244,244,245,.14)}
+.m.u div{background:var(--green);color:#0A0A0C;border-color:var(--green)}
+.cin{padding:16px 20px;border-top:1px solid rgba(244,244,245,.1)}
+.pipe{margin:16px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:12px;font-size:12px;line-height:1.5}
+
+/* keyword workspace */
+.kwg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.kwc{padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);min-height:200px}
+.kwh{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kwh b{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.kwh i{font-style:normal;font-size:11px;font-weight:600;color:var(--ink3);border:1px solid var(--line2);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.kwd{margin:4px 0 12px;font-size:10.5px;color:var(--ink3);overflow-wrap:anywhere}
+.kws{display:flex;flex-wrap:wrap;gap:6px}
+.kw{padding:6px 10px;border-radius:6px;font-size:11px;font-weight:500;line-height:1.35;text-align:left;background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.22);color:var(--ink)}
+.kw:hover{background:rgba(0,230,118,.14)}
+.kw.on{background:var(--green);color:#0A0A0C;border-color:var(--green)}
+.selbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+
+/* queue */
+.bulk{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 20px;margin-bottom:24px;border:1px solid rgba(244,244,245,.16);border-radius:10px;background:var(--surface)}
+.cb{width:16px;height:16px;border-radius:4px;border:1px solid rgba(244,244,245,.3);display:block}
+.cb.on{background:var(--ink)}
+
+/* editor */
+.ed{display:grid;grid-template-columns:212px minmax(0,1fr) 340px;gap:28px;align-items:start}
+.ed aside{position:sticky;top:190px}
+.ol{display:flex;flex-direction:column;gap:2px}
+.ol button{text-align:left;padding:8px 10px;border-radius:7px;font-size:12px;line-height:1.4;color:var(--ink2)}
+.ol button.h{font-weight:600;color:var(--ink)}
+.ol button.on{background:var(--tint2);color:var(--ink)}
+.ol button.sub{padding-left:22px}
+.ol button.thin{color:var(--red)}
+.cov{margin-top:24px;padding:14px;border:1px solid rgba(244,244,245,.14);border-radius:9px}
+.cov b{display:block;font-size:11px;font-weight:600;margin-bottom:8px}
+.cov span{font-size:11px;line-height:1.5;color:var(--ink2)}
+.doc{padding:44px 48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);min-width:0}
+.doc h2{margin:14px 0 0;font-size:30px;font-weight:700;line-height:1.15;letter-spacing:-.6px;text-wrap:balance;scroll-margin-top:200px}
+.doc h3{margin:0 0 12px;font-size:17px;font-weight:600;scroll-margin-top:200px}
+.doc p{font-size:15px;line-height:1.65;max-width:72ch}
+.doc .blk{margin-top:28px}
+.doc .lead{margin-top:20px;scroll-margin-top:200px}
+.doc .hl{background:rgba(0,230,118,.06);border-left:3px solid var(--green);padding:14px 16px}
+.ins{background:rgba(0,230,118,.12);border-radius:3px;padding:1px 3px}
+.foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:36px;padding-top:24px;border-top:1px solid rgba(244,244,245,.1)}
+.foot .small{margin-left:auto}
+.live{padding:20px;border-radius:12px;background:var(--zinc);color:var(--ink);border:1px solid var(--line)}
+.live .cap{color:#fff;opacity:.75}
+.live .top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.live .num{display:flex;align-items:baseline;gap:6px;margin-top:12px}
+.live .num b{font-size:40px;font-weight:700;line-height:1;letter-spacing:-1.4px;color:var(--coral);font-variant-numeric:tabular-nums}
+.live .num b.pass{color:var(--mint)}
+.live .num span{font-size:12px;font-weight:600;opacity:.7}
+.sug{padding:18px;border:1px solid rgba(244,244,245,.16);border-radius:11px;background:var(--surface)}
+.sug.done{border-color:var(--green);background:rgba(0,230,118,.06)}
+.sug.off{border-color:rgba(244,244,245,.1);background:rgba(244,244,245,.03);opacity:.75}
+.sug .h{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.sug .h span:last-child{font-size:11px;font-weight:600;color:var(--ink3)}
+.sug b{display:block;font-size:12px;font-weight:600;line-height:1.45}
+.sug p{margin-top:8px;font-size:12px;line-height:1.5;color:var(--ink2)}
+.sug .a{display:flex;gap:8px;margin-top:14px}
+
+/* score */
+.ring{position:relative;width:208px;height:208px}
+.ring svg{transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .c b{font-size:52px;font-weight:700;line-height:1;letter-spacing:-2px;color:var(--amber);font-variant-numeric:tabular-nums}
+.ring .c b.pass{color:var(--green)}
+.ring .c span{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--green);margin-top:8px}
+.dim .bar{height:12px;border-radius:7px;background:rgba(244,244,245,.09)}
+.heat{display:grid;grid-template-columns:120px repeat(4,minmax(0,1fr));gap:6px}
+.heat div{padding:14px 10px;border-radius:6px;font-size:12px;font-weight:700;text-align:center;line-height:1.3}
+.heat .hh{background:none;color:var(--green);font-size:9px;padding:10px 4px;letter-spacing:.06em}
+.heat .rl{text-align:left;font-weight:600}
+.rec{padding:20px;border:1px solid rgba(244,244,245,.13);border-radius:11px;background:var(--surface)}
+.snip{margin-top:14px;padding:12px 14px;border-radius:8px;background:var(--bg);font-size:12px;line-height:1.5}
+
+/* prompt library / cards */
+.cl4{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:20px;margin-bottom:28px}
+.cl4 .card{padding:20px;border-radius:11px}
+.cl4 b.n{display:block;margin-top:12px;font-size:24px;letter-spacing:-.6px}
+.tpl{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.tpl .card{padding:20px;border-radius:11px;text-align:left}
+.tpl .card:hover{border-color:var(--line2)}
+.int{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.int .card{padding:22px;border-radius:11px}
+.ini{width:36px;height:36px;flex:none;border-radius:9px;border:1px solid rgba(244,244,245,.18);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:var(--bg)}
+.rule{display:flex;align-items:flex-start;gap:11px;text-align:left;font-size:12px;line-height:1.5;width:100%}
+.rule .cb{margin-top:1px;flex:none}
+
+/* charts */
+.lc{position:relative;height:240px;margin-left:36px}
+.lc svg{position:absolute;inset:0;width:100%;height:100%}
+.yl{position:absolute;left:-36px;width:28px;text-align:right;font-size:10px;color:var(--ink3);transform:translateY(-50%);font-variant-numeric:tabular-nums}
+.xl{display:flex;justify-content:space-between;margin:10px 0 0 36px;font-size:10px;color:var(--ink3)}
+.bc{position:relative;height:150px;display:flex;align-items:flex-end;gap:6px;border-bottom:1px solid var(--line);background:repeating-linear-gradient(to top,transparent 0,transparent 36px,rgba(244,244,245,.07) 36px,rgba(244,244,245,.07) 37px)}
+.bc>div{flex:1;position:relative;height:100%;display:flex;align-items:flex-end;justify-content:center}
+.bc i{display:block;width:70%;max-width:30px;background:#3F4248;border-radius:3px 3px 0 0;min-height:2px}
+.bc i.pk{background:var(--green)}
+.bc span{position:absolute;bottom:-20px;font-size:9px;color:var(--ink3);white-space:nowrap}
+.leg{display:flex;gap:24px;margin-top:18px;font-size:11px;color:var(--ink2);flex-wrap:wrap}
+.leg span{display:flex;align-items:center;gap:8px}
+.leg i{display:block;width:14px;height:2px;background:var(--ink)}
+.cit{display:flex;align-items:center;gap:16px;padding:14px 24px;border-bottom:1px solid rgba(244,244,245,.07)}
+.cit:last-child{border-bottom:0}
+.cit>div:first-child{flex:1;min-width:0}
+.ban{display:flex;align-items:center;gap:7px;padding:7px 11px;border-radius:20px;border:1px solid rgba(244,244,245,.2);font-size:12px;font-weight:600}
+.ban button{font-size:13px;color:var(--ink4);line-height:1}
+.ban.ok{border-color:rgba(0,230,118,.3);background:var(--green-bg)}
+
+/* team / usage */
+.mrow{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(244,244,245,.08)}
+.mrow:last-child{border-bottom:0}
+.av{position:relative;width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--tint2)}
+.av.on::after{content:"";position:absolute;right:0;bottom:0;width:9px;height:9px;border-radius:50%;background:var(--green);border:2px solid #fff}
+.mrow .i{flex:1;min-width:0}
+.mrow .i b{display:block;font-size:13px;font-weight:600}
+.mrow select{padding:6px 10px;border:1px solid var(--line2);border-radius:6px;font-size:12px;background:var(--surface)}
+.trash{opacity:.7}
+
+.demo{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));background:var(--zinc);color:var(--green);border:1px solid var(--line2);font-size:9px;font-weight:700;letter-spacing:.18em;padding:5px 12px;border-radius:16px;z-index:60;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);background:var(--green);color:#0A0A0C;padding:12px 18px;border-radius:9px;font-size:12px;font-weight:600;opacity:0;pointer-events:none;transition:all .2s;z-index:70;max-width:calc(100vw - 32px);box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.ov{display:none;position:fixed;inset:0;background:rgba(244,244,245,.35);z-index:35}
+
+@media(max-width:1100px){
+  .ed{grid-template-columns:minmax(0,1fr)}
+  .ed aside{position:static}
+  .wiz{grid-template-columns:minmax(0,1fr);gap:20px}
+  .wizin{grid-template-columns:minmax(0,1fr)}
+  .stepl{flex-direction:row;overflow-x:auto}
+  .stepl .stp{width:auto;min-width:190px}
+}
+@media(max-width:900px){
+  .sb{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .2s}
+  .sb.open{transform:none}
+  .ov.open{display:block}
+  .mbar{display:flex}
+  .hd{position:static;padding:24px max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px))}
+  .hd h1{font-size:22px}
+  .bd{padding:24px max(16px,env(safe-area-inset-right,0px)) 72px max(16px,env(safe-area-inset-left,0px))}
+  .split,.split2,.side,.side.s360,.side.s300{grid-template-columns:minmax(0,1fr)}
+  .kwg{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .doc{padding:28px 22px}
+  .doc h2{font-size:24px}
+  .card.pad32{padding:22px}
+}
+@media(max-width:560px){
+  .kwg{grid-template-columns:minmax(0,1fr)}
+  .eng{grid-template-columns:96px 1fr 40px;gap:10px}
+  .rv{grid-template-columns:1fr;gap:4px}
+  .heat{grid-template-columns:90px repeat(4,minmax(0,1fr))}
+  .heat div{padding:10px 4px;font-size:11px}
+  .lc{height:200px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* Conversational view: neutral, low-glare styling. Emerald reserved for "Generate from this brief". */
+.chat .m.u div{background:#2C2F36;color:var(--ink);border-color:var(--line2)}
+.chat .btn-p{background:#2C2F36;color:var(--ink);border:1px solid var(--line2)}
+.chat .btn-p:hover{background:#363A42;transform:none;box-shadow:none}
+.chat .inp:focus-visible{outline-color:rgba(255,255,255,.25)}
+.chat .chip:hover{background:var(--tint2)}
+
+.demo .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:7px;vertical-align:1px;animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,230,118,.6)}50%{opacity:.25;box-shadow:0 0 0 4px rgba(0,230,118,0)}}
+@media(prefers-reduced-motion:reduce){.demo .dot{animation:none}}
+</style>
+
+<div class="app">
+  <div class="ov" id="ov" data-a="menu"></div>
+  <aside class="sb" id="sb">
+    <div class="logo"><div class="mark">G</div><div><b>GEO CONTENT DESK</b><span>INTERACTIVE DEMO</span></div></div>
+    <div class="sbl">Workspace</div>
+    <button class="ws" data-a="client"><span id="cl">Northline Legal</span><small>SWITCH</small></button>
+    <nav class="nav" id="nav"></nav>
+    <div class="cred"><b>Monthly generation credits</b><div class="cr"><i></i></div><span>124 of 200 used this month</span></div>
+  </aside>
+  <main class="mc">
+    <div class="mbar"><button data-a="menu" aria-label="Menu">&#9776;</button><b>GEO Content Desk</b></div>
+    <header class="hd" id="hd"></header>
+    <div class="bd" id="view"></div>
+  </main>
+</div>
+<div class="demo"><i class="dot"></i>DEMO</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CLIENTS=['Northline Legal','Verdant Health','Demo Workspace'];
+const S={
+  screen:'dashboard',step:1,flow:'wizard',viz:'ring',range:'12w',client:0,ptab:'clusters',
+  promptText:'what is generative engine optimization',
+  brief:'Explainer for B2B marketing leads on how answer engines pick sources, with a comparison of GEO and classic SEO and a short checklist.',
+  srcBrief:'',chatInput:'',adj:[0,2],tog:[0,1,3],sel:[2,3,5],acc:[],dis:[],ol:0,
+  dials:[72,84,58,34],guard:[true,true,false],rules:[true,true,true,false],
+  ban:['unlock','game changer','revolutionary','leverage','supercharge','seamless'],
+  desc:'Calm, premium, declarative. We explain before we sell. No hype, no exclamation marks, no jargon we would not say out loud to a CFO.',
+  kw:[],custom:[],nid:100,
+  msgs:[
+    ['u','I need something for the prompt people keep asking: what is GEO. Northline Legal is the client.'],
+    ['a','Northline is cited 3 times for that prompt today, mostly by Perplexity, always in second position. I would open with a one sentence definition and follow with a GEO versus SEO table, which is what ChatGPT tends to quote. Shall I target 1400 words?'],
+    ['u','Yes, and keep it non salesy.'],
+    ['a','Understood. I will use the house voice with claim strength high and no product mentions until the final section. Predicted GEO score 82.']
+  ],
+  queue:[
+    {id:1,p:'how do answer engines choose sources',c:'Mechanics',st:'Drafting',pct:46},
+    {id:2,p:'geo vs seo what changed',c:'Comparison',st:'Scoring',pct:78},
+    {id:3,p:'how to measure ai search visibility',c:'Measurement',st:'Needs review',pct:100},
+    {id:4,p:'best geo tools for b2b saas',c:'Tools',st:'Queued',pct:0},
+    {id:5,p:'does schema markup help geo',c:'Mechanics',st:'Approved',pct:100},
+    {id:6,p:'geo checklist for content teams',c:'Playbook',st:'Drafting',pct:23},
+    {id:7,p:'why is my site not cited by chatgpt',c:'Diagnostics',st:'Scoring',pct:64},
+    {id:8,p:'how often do engines refresh sources',c:'Mechanics',st:'Queued',pct:0},
+    {id:9,p:'what is an answer block in geo',c:'Playbook',st:'Queued',pct:0},
+    {id:10,p:'geo for law firms',c:'Industry',st:'Drafting',pct:31},
+    {id:11,p:'does llms.txt matter',c:'Mechanics',st:'Scoring',pct:55},
+    {id:12,p:'how to track brand mentions in chatgpt',c:'Measurement',st:'Queued',pct:0}
+  ]
+};
+const CL=()=>CLIENTS[S.client];
+const NAV=[
+ ['dashboard','Overview','M3 3h6v6H3zM11 3h6v4h-6zM11 9h6v8h-6zM3 11h6v6H3z'],
+ ['generate','New article','M10 2l1.8 5.2L17 9l-5.2 1.8L10 16l-1.8-5.2L3 9l5.2-1.8z'],
+ ['queue','Batch queue','M3 4h14v2H3zM3 9h14v2H3zM3 14h10v2H3z'],
+ ['editor','Draft editor','M4 3h8l4 4v10H4z'],
+ ['score','GEO score','M10 2a8 8 0 108 8h-8z'],
+ ['keywords','Prompt library','M2 8l6-6h8v8l-6 6zM12 5h2v2h-2z'],
+ ['publish','Publishing','M10 2l5 6h-3v6H8V8H5zM4 16h12v2H4z'],
+ ['analytics','Visibility','M3 15h3V8H3zM8 15h3V3H8zM13 15h3v-7h-3z'],
+ ['settings','Brand voice','M10 6a4 4 0 100 8 4 4 0 000-8zM9 2h2v3H9zM9 15h2v3H9zM2 9h3v2H2zM15 9h3v2h-3z'],
+ 'Workspace',
+ ['team','Team','M7 8a3 3 0 100-6 3 3 0 000 6zM1 17c0-3 3-5 6-5s6 2 6 5zM14 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM14.5 11c2.5 0 4.5 1.6 4.5 4.5V17h-4z'],
+ ['usage','Usage','M3 16h14v2H3zM4 9h3v6H4zM9 5h3v10H9zM14 11h3v4h-3z'],
+ ['trash','Trash','M6 3h8v2h4v2H2V5h4zM4 8h12l-1 10H5z']
+];
+const HEAD={
+ dashboard:['OVERVIEW','Answer engine visibility','How often the engines quote you, and what to write next.'],
+ generate:['CREATE','New GEO article','Start from a prompt buyers actually type. We build the brief, draft and score in one run.'],
+ queue:['PRODUCTION','Batch queue','Twelve prompts drafting, scoring and staging in parallel.'],
+ editor:['DRAFT','What is generative engine optimization?','Edit alongside live scoring. Accept a suggestion and the score moves.'],
+ score:['DIAGNOSTIC','GEO score and recommendations','Where this draft wins a citation, and where it loses one.'],
+ keywords:['LIBRARY','Prompts and clusters','The question set we are trying to own for this client.'],
+ publish:['DISTRIBUTION','Publishing and integrations','Where approved drafts go, and what gets injected on the way out.'],
+ analytics:['MEASUREMENT','Visibility tracking','Citations, answer share and which drafts earn them.'],
+ settings:['CONFIGURATION','Brand voice','Every generation inherits these rules. Change them once.'],
+ team:['WORKSPACE','Members and access','Manage who can generate, edit and publish for this workspace.'],
+ usage:['WORKSPACE','AI spend and tokens','Token consumption and estimated cost across every feature.'],
+ trash:['WORKSPACE','Trash','Deleted articles are kept for 30 days before permanent removal.']
+};
+const scoreCol=v=>v>=80?'#10B981':v>=70?'#F59E0B':'#EF4444';
+const bar=(p,c,h)=>`<div class="bar"${h?` style="height:${h}px"`:''}><i style="width:${p}%;background:${c}"></i></div>`;
+const SUG=[
+ {k:'SOURCING',imp:6,t:'Attribute the retrieval claim',b:'Engines rarely cite unsourced assertions. Add the sample size and study you are drawing on.'},
+ {k:'ENTITIES',imp:5,t:'Name the brand entity twice more',b:()=>`${CL()} appears once. Two more natural mentions raise entity confidence.`},
+ {k:'STRUCTURE',imp:4,t:'Add an answer block to the FAQ',b:'The FAQ section opens with context instead of the answer. Lead with the 25 word version.'}
+];
+const liveScore=()=>71+S.acc.reduce((a,i)=>a+SUG[i].imp,0);
+const DIALS=[
+ ['Formality',['Casual','Balanced','Enterprise']],
+ ['Claim strength',['Hedged','Measured','Declarative']],
+ ['Technical depth',['Plain','Practitioner','Expert']],
+ ['Sentence length',['Short','Medium','Long']]
+];
+const dword=(i,v)=>DIALS[i][1][v<40?0:v<70?1:2];
+const dialHtml=i=>`<div><div class="dial"><span>${DIALS[i][0]}</span><span data-dv="${i}">${dword(i,S.dials[i])}</span></div><input type="range" min="0" max="100" value="${S.dials[i]}" data-dial="${i}" aria-label="${DIALS[i][0]}"></div>`;
+const tgl=(arr,v)=>arr.includes(v)?arr.filter(x=>x!==v):[...arr,v];
+
+/* ---------- screens ---------- */
+function vDash(){
+ const st=[['ANSWER SHARE','34','%','up 9 points since April'],['CITATIONS THIS MONTH','218','','across 6 engines'],['DRAFTS IN FLIGHT','12','','4 awaiting human review'],['AVG GEO SCORE','78','/ 100','publish gate set at 75']];
+ const eng=[['ChatGPT',41,'#00E676'],['Perplexity',37,'#00E676'],['Google AI Overviews',29,'#10B981'],['Claude',24,'#10B981'],['Copilot',16,'rgba(244,244,245,.4)'],['Gemini',11,'rgba(244,244,245,.4)']];
+ const gaps=[['how do answer engines choose which sources to cite','2.4k asks per month · not cited'],['geo vs seo what is the difference','1.8k asks · competitor cited 6 times'],['how to measure ai search visibility','980 asks · thin coverage'],['best geo tools for b2b saas','740 asks · not cited']];
+ const dr=[['What is generative engine optimization?','what is geo',71,'Needs review','warn'],['How answer engines select sources','how engines cite',86,'Approved','ok'],['GEO vs SEO: what actually changed','geo vs seo',79,'Scoring','mut'],['Measuring AI search visibility','measure visibility',64,'Drafting','mut'],['Schema markup for citability','schema for geo',83,'Published','ok']];
+ return `
+ <div class="sg stats" style="margin-bottom:48px">${st.map(s=>`<div class="card stat"><div class="cap">${s[0]}</div><div class="v">${s[1]}<small>${s[2]}</small></div><div class="d">${s[3]}</div></div>`).join('')}</div>
+ <div class="sg split" style="margin-bottom:48px">
+  <section class="card"><div class="sp" style="margin-bottom:24px"><h2 class="t16">Answer share by engine</h2><button class="lnk" data-a="go" data-v="analytics">Full report</button></div>
+   <div class="stack g16">${eng.map(e=>`<div class="eng"><div>${e[0]}</div>${bar(e[1],e[2],10).replace('class="bar"','class="bar" style="height:10px;border-radius:6px"')}<div style="text-align:right" class="mm">${e[1]}%</div></div>`).join('')}</div></section>
+  <section class="card"><h2 class="t16" style="margin-bottom:8px">Prompt coverage gaps</h2><p class="small" style="margin-bottom:24px;font-size:12px">Questions buyers ask engines where you are not cited.</p>
+   <div class="stack g12">${gaps.map((g,i)=>`<div class="gap"><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;line-height:1.45">${g[0]}</div><div class="small" style="margin-top:6px">${g[1]}</div></div><button class="btn btn-o btn-s" data-a="draftgap" data-v="${i}">Draft</button></div>`).join('')}</div></section>
+ </div>
+ <section><div class="sp" style="margin-bottom:16px"><h2 class="t16">In flight</h2><button class="lnk" data-a="go" data-v="queue">Open batch queue</button></div>
+  <div class="tw"><div class="in"><div class="th" style="grid-template-columns:2.4fr 1fr 1fr 1fr 70px"><div>Article</div><div>Target prompt</div><div>GEO score</div><div>Stage</div><div></div></div>
+  ${dr.map(d=>`<div class="tr" style="grid-template-columns:2.4fr 1fr 1fr 1fr 70px"><div class="n">${d[0]}</div><div class="muted" style="font-size:12px">${d[1]}</div><div class="row" style="gap:8px"><b style="font-size:15px;color:${scoreCol(d[2])}">${d[2]}</b><div class="bar" style="width:44px"><i style="width:${d[2]}%;background:${scoreCol(d[2])}"></i></div></div><div><span class="pill ${d[4]}">${d[3]}</span></div><div style="text-align:right"><button class="lnk" data-a="go" data-v="editor">Open</button></div></div>`).join('')}
+  </div></div></section>`;
+}
+
+const KW=[
+ ['sc','Search Console','sc-domain:northlinelegal.com · top queries',['northline legal','northlinelegal','"ai contract review software"','"legal ai for law firms"','northline legal reviews','contract analytics for in-house counsel','legal tech consultancy paris','ai legal research tool','m&a due diligence ai']],
+ ['echo','AI Echo','Past GEO benchmark prompts',['best AI tools for contract review 2026','how to implement AI in a law firm','what is generative engine optimization (GEO)?','AI tools for legal research','how to measure AI content ROI']],
+ ['seed','Seeded','ICP-rooted starting points',['generative engine optimization','AI go-to-market strategy','AI-first content marketing','LLM-optimized content','GEO vs SEO','B2B demand generation','legal tech adoption','agentic AI for business','AI citation optimization']]
+];
+function vKeywords(){
+ const cols=KW.map(c=>`<div class="kwc"><div class="kwh"><b>${c[1]}</b><i>${c[3].length}</i></div><div class="kwd">${c[2]}</div><div class="kws">${c[3].map(k=>`<button class="kw ${S.kw.includes(k)?'on':''}" data-a="kw" data-k="${esc(k)}">${esc(k)}</button>`).join('')}</div></div>`).join('');
+ const cu=`<div class="kwc"><div class="kwh"><b>Custom</b><i>${S.custom.length}</i></div><div class="kwd">Add your own</div><div class="kws">${S.custom.map(k=>`<button class="kw ${S.kw.includes(k)?'on':''}" data-a="kw" data-k="${esc(k)}">${esc(k)}</button>`).join('')}</div><div class="row" style="margin-top:12px;gap:6px"><input class="inp" id="kwin" style="padding:8px 10px;font-size:12px" placeholder="Type a keyword" aria-label="Custom keyword"><button class="btn btn-p btn-s" data-a="kwadd">Add</button></div></div>`;
+ return `<div class="row" style="margin-bottom:16px;gap:10px"><span class="tag">New</span><h2 class="t18">Keyword workspace</h2></div>
+ <div class="kwg">${cols}${cu}</div>
+ <div class="selbar"><span class="cap">Selected ${S.kw.length}</span>${S.kw.length?S.kw.map(k=>`<span class="pill" style="background:var(--green);color:#0A0A0C;border-color:var(--green)">${esc(k)}</span>`).join(''):'<span class="small">Click keywords above to build the article brief.</span>'}<button class="btn btn-p btn-s" style="margin-left:auto" data-a="kwuse"${S.kw.length?'':' disabled style="margin-left:auto;opacity:.4;cursor:not-allowed"'}>Use in guided wizard</button></div>`;
+}
+const PRED=()=>76+S.adj.length*3;
+function vWizard(){
+ const T=['Prompt and format','Sources and entities','Voice and constraints','Review and generate'],H=['What we are trying to win','What we assert and cite','How it should sound','Confirm and run'];
+ const adj=['is geo replacing seo','does geo work for b2b','who invented geo','geo checklist','geo tools 2026'];
+ let body='';
+ if(S.step===1)body=`<div class="stack g24">
+  <div><label class="lbl" for="pt">Target prompt</label><input class="inp" id="pt" data-bind="promptText" value="${esc(S.promptText)}"><div class="hint">Write it the way a buyer types it into an answer engine.</div></div>
+  <div><span class="lbl">Adjacent prompts we will also answer</span><div class="row wrap" style="gap:8px">${adj.map((a,i)=>`<button class="chip ${S.adj.includes(i)?'on':''}" data-a="adj" data-v="${i}">${a}</button>`).join('')}</div></div>
+  <div class="sg" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px"><div><label class="lbl" for="f1">Format</label><select class="sel" id="f1"><option>Definitional explainer</option><option>Comparison table article</option><option>Step by step guide</option><option>Statistics roundup</option></select></div><div><label class="lbl" for="f2">Length</label><select class="sel" id="f2"><option>1200 to 1600 words</option><option>800 to 1200 words</option><option>2000 words plus</option></select></div></div></div>`;
+ if(S.step===2)body=`<div class="stack g24"><div><span class="lbl">Entities to assert</span><div class="stack" style="gap:10px">${[[CL(),'Brand entity, linked to knowledge panel','VERIFIED'],['Generative engine optimization','Primary concept, define in first 40 words','PRIMARY'],['Answer engine','Supporting concept','SUPPORTING'],['Retrieval augmented generation','Technical context, one mention','OPTIONAL']].map(e=>`<div class="ent"><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600">${e[0]}</div><div class="small" style="margin-top:4px">${e[1]}</div></div><span class="tag">${e[2]}</span></div>`).join('')}</div></div>
+  <div><span class="lbl">Citable sources</span><div class="drop">Drop research PDFs, or paste URLs. Engines cite pages that cite sources.</div></div></div>`;
+ if(S.step===3)body=`<div class="stack g24"><div class="ent" style="background:rgba(0,230,118,.05)"><div style="flex:1;font-size:12px;font-weight:600">Voice profile: ${CL()} house style</div><button class="lnk" data-a="go" data-v="settings">Edit profile</button></div>${[0,1,2,3].map(dialHtml).join('')}</div>`;
+ if(S.step===4)body=`<div class="stack g16">${[['TARGET PROMPT',esc(S.promptText)],['ADJACENT',S.adj.length+' prompts also answered'],['FORMAT','Definitional explainer, 1200 to 1600 words'],['ENTITIES','4 asserted, 1 verified against knowledge graph'],['VOICE',CL()+' house style, '+dword(1,S.dials[1]).toLowerCase()+', '+dword(3,S.dials[3]).toLowerCase()+' sentences'],['COST','1 credit, roughly 4 minutes']].map(r=>`<div class="rv"><b>${r[0]}</b><span>${r[1]}</span></div>`).join('')}
+  <div class="row wrap" style="margin-top:8px"><button class="btn btn-p" data-a="run">Generate article</button><button class="btn btn-o" data-a="run">Add to batch instead</button></div></div>`;
+ const nav=S.step<4?`<div class="nav2"><button class="small" style="font-weight:600" data-a="prev">Back</button><button class="btn btn-p" data-a="next">Continue</button></div>`:'';
+ return `<div class="wiz"><div class="stack stepl" style="gap:4px">${T.map((t,i)=>`<button class="stp ${S.step===i+1?'on':''}" data-a="step" data-v="${i+1}"><i>${i+1}</i><div><b>${t}</b><span>${H[i]}</span></div></button>`).join('')}</div>
+ <div class="wizin"><section class="card pad32"><div class="cap">Step ${S.step} of 4</div><h2 class="t22" style="margin:8px 0 24px">${T[S.step-1]}</h2>${body}${nav}</section>
+ <aside class="card" style="padding:24px"><div class="cap">Predicted GEO score</div><div class="row" style="align-items:baseline;gap:6px;margin-top:14px"><span class="big">${PRED()}</span><span style="font-size:13px;font-weight:600;color:var(--ink3)">/ 100</span></div><p class="muted" style="margin-top:16px;font-size:12px;line-height:1.55">Based on prompt competition, entity coverage and how many sources you attached.</p><div class="stack g12" style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(244,244,245,.1)"><div class="kv"><span>Prompt competition</span><span>Moderate</span></div><div class="kv"><span>Entity coverage</span><span>4 of 5</span></div><div class="kv"><span>Adjacent prompts</span><span>${S.adj.length}</span></div><div class="kv"><span>Attached sources</span><span>3</span></div></div></aside></div></div>`;
+}
+function vSingle(){
+ const tg=['Inject FAQ schema','Add comparison table','Require 3 citable sources','Write answer block per section'];
+ return `<div class="sg side s360"><section class="card pad32"><h2 class="t22" style="margin-bottom:24px">One brief, one pass</h2><div class="stack g24">
+ <div><label class="lbl" for="br">Brief</label><textarea class="txa" id="br" rows="7" data-bind="brief">${esc(S.brief)}</textarea></div>
+ <div class="sg" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px">${[['Format','Definitional explainer'],['Length','1200 to 1600'],['Voice','House style']].map(q=>`<div><span class="lbl">${q[0]}</span><div class="sel" style="font-weight:600">${q[1]}</div></div>`).join('')}</div>
+ <div class="row wrap" style="gap:8px">${tg.map((t,i)=>`<button class="tgb ${S.tog.includes(i)?'on':''}" data-a="tog" data-v="${i}"><span class="bx"></span>${t}</button>`).join('')}</div>
+ <button class="btn btn-p" style="align-self:flex-start;padding:14px 24px" data-a="run">Generate and score</button></div></section>
+ <aside class="card dark"><div class="cap">What we will do</div><ol class="pipe">${['Pull the prompt set and see who is cited today','Draft with an answer block opening every section','Assert your entities and attach citable sources','Score against quotability, sourcing, structure, entities','Stage for human review, never auto publish below 75'].map(x=>`<li>${x}</li>`).join('')}</ol><div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.18);font-size:11px;opacity:.75">Typical run: 3 to 5 minutes, 1 credit.</div></aside></div>`;
+}
+function vChat(){
+ const rows=[['CLIENT',CL()],['PROMPT',esc(S.promptText)],['FORMAT','Definitional explainer, 1400 words'],['VOICE','House style, no product mentions until final section'],['PREDICTED SCORE','82 of 100']];
+ return `<div class="sg side s360"><section class="chat"><div class="msgs" id="msgs">${S.msgs.map(m=>`<div class="m ${m[0]}"><div>${esc(m[1])}</div></div>`).join('')}</div>
+ <div class="cin"><div class="row wrap" style="gap:8px;margin-bottom:12px">${['Show me the competing citations','Draft it now','Make it a comparison article'].map(c=>`<button class="chip" style="font-size:11px" data-a="chipfill" data-v="${c}">${c}</button>`).join('')}</div>
+ <div class="row" style="gap:10px"><input class="inp" id="ci" data-bind="chatInput" value="${esc(S.chatInput)}" placeholder="Describe the article, or paste a prompt you want to win" aria-label="Message"><button class="btn btn-p" data-a="send">Send</button></div></div></section>
+ <aside class="card"><div class="cap">Brief so far</div><div class="stack" style="margin-top:18px;gap:14px">${rows.map(r=>`<div style="padding-bottom:14px;border-bottom:1px solid rgba(244,244,245,.09)"><div style="font-size:10px;font-weight:700;letter-spacing:.09em;color:var(--ink4)">${r[0]}</div><div style="margin-top:6px;font-size:12px;font-weight:600;line-height:1.45${r[0]==='PREDICTED SCORE'?';color:var(--ink)':''}">${r[1]}</div></div>`).join('')}</div><button class="btn btn-p" style="width:100%;margin-top:20px" data-a="run">Generate from this brief</button></aside></div>`;
+}
+function vSources(){
+ return `<div class="sg side s360"><section class="card pad32"><h2 class="t22" style="margin-bottom:24px">Bring your own sources</h2><div class="stack g24">
+ <div><span class="lbl">Upload sources</span><div class="drop" style="padding:34px"><div style="font-size:12px;font-weight:600;margin-bottom:4px;color:var(--ink)">Drop files here or paste URLs</div>PDF, DOCX, TXT, CSV or a URL list. Up to 10 files, 25 MB each.</div>
+ <div class="stack" style="gap:8px;margin-top:12px">${[['legal-ai-adoption-survey-2026.pdf','2.1 MB · 38 pages'],['northline-client-benchmarks.csv','184 KB · 1,240 rows'],['https://www.example.org/ai-search-study','Fetched, 4,100 answers']].map(f=>`<div class="ent"><div style="flex:1;min-width:0;overflow-wrap:anywhere"><div style="font-size:12px;font-weight:600">${f[0]}</div><div class="small" style="margin-top:3px">${f[1]}</div></div><span class="tag">READY</span></div>`).join('')}</div></div>
+ <div><label class="lbl" for="sb2">Generation instructions</label><textarea class="txa" id="sb2" rows="5" data-bind="srcBrief" placeholder="Synthesise the key findings from these sources into a 1,800 word article for in-house counsel evaluating AI tools.">${esc(S.srcBrief)}</textarea></div>
+ <button class="btn btn-p" style="align-self:flex-start;padding:14px 24px" data-a="run">Generate from sources</button></div></section>
+ <aside class="card dark"><div class="cap">What we will do</div><ol class="pipe">${['Read every attached source and extract citable claims','Build the outline around claims that carry a number','Attribute each statistic to the file or URL it came from','Flag any claim the sources do not support','Score and stage for human review'].map(x=>`<li>${x}</li>`).join('')}</ol><div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.18);font-size:11px;opacity:.75">Typical run: 5 to 7 minutes, 2 credits.</div></aside></div>`;
+}
+function vGenerate(){
+ const tabs=[['wizard','Guided wizard'],['single','One shot brief'],['chat','Conversational'],['keywords','Keyword workspace'],['sources','Bring your own sources']];
+ const m={wizard:vWizard,single:vSingle,chat:vChat,keywords:vKeywords,sources:vSources}[S.flow]();
+ return `<div class="seg" style="margin-bottom:32px">${tabs.map(t=>`<button class="${S.flow===t[0]?'on':''}" data-a="flow" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>${m}`;
+}
+const STG={'Needs review':'warn','Approved':'ok','Queued':'mut','Drafting':'mut','Scoring':'mut'};
+function vQueue(){
+ const n=S.sel.length;
+ return `<div class="bulk"><div style="font-size:12px;font-weight:600;white-space:nowrap">${n} selected</div><div style="width:1px;height:20px;background:rgba(244,244,245,.14)"></div><div class="row wrap" style="gap:8px">${['Rescore','Approve','Schedule','Reassign voice'].map(b=>`<button class="btn btn-o btn-s" data-a="bulk" data-v="${b}">${b}</button>`).join('')}</div><div class="small" style="margin-left:auto">Batch 041 · started 09:12 · ${S.queue.length} prompts</div></div>
+ <div class="tw"><div class="in" style="min-width:760px"><div class="th" style="grid-template-columns:28px 2.2fr 1.1fr 1fr 1.4fr 70px"><div></div><div>Prompt</div><div>Cluster</div><div>Stage</div><div>Progress</div><div></div></div>
+ ${S.queue.map(q=>{const on=S.sel.includes(q.id);const f=q.st==='Needs review'?'#EF4444':q.pct===100?'#10B981':'#00E676';return `<div class="tr" style="grid-template-columns:28px 2.2fr 1.1fr 1fr 1.4fr 70px"><button data-a="qsel" data-v="${q.id}" aria-label="Select" aria-pressed="${on}"><span class="cb ${on?'on':''}"></span></button><div class="n">${esc(q.p)}</div><div style="font-size:11px;font-weight:600;color:var(--green)">${q.c}</div><div><span class="pill ${STG[q.st]}">${q.st}</span></div><div class="row" style="gap:10px"><div class="bar" style="flex:1"><i style="width:${q.pct}%;background:${f}"></i></div><span style="font-size:11px;font-weight:600;width:32px;text-align:right">${q.pct}%</span></div><div style="text-align:right"><button class="lnk" data-a="go" data-v="editor">${q.st==='Needs review'?'Review':q.st==='Approved'?'Open':'View'}</button></div></div>`}).join('')}
+ </div></div>`;
+}
+
+const DOCIDS=['sec-h1','sec-lead','sec-geo','sec-pick','sec-check','sec-faq'];
+function vEditor(){
+ const A=i=>S.acc.includes(i);
+ const OL=[['H1 What is GEO?','h'],['Answer block','sub'],['GEO vs SEO','sub'],['How engines pick sources','sub'],['Checklist','sub'],[A(2)?'FAQ':'FAQ (thin)',A(2)?'sub':'sub thin']];
+ const ins=t=>`<span class="ins">${t}</span>`;
+ const sc=liveScore(),pass=sc>=75;
+ const pick=A(0)?'Retrieval favours pages that state a claim plainly, attribute it, and repeat the entity by name. In our sample of 4,100 answers, 71 percent of cited passages were under 60 words.':'Retrieval favours pages that state claims plainly. Engines tend to prefer content that is easy to quote.';
+ const geo='Both aim at discovery, but the unit of victory differs. SEO wins a position in a list. GEO wins a clause inside a synthesized answer, which means the writing has to be extractable on its own.'+(A(1)?' '+ins(CL()+' treats that extractability as the first test for every article.'):'');
+ const chk='Open every section with a direct answer. Attribute every number. Name the entity instead of writing it or the company. Keep paragraphs under 60 words so a passage can be lifted whole.'+(A(1)?' '+ins(CL()+' applies the same checklist to every client article.'):'');
+ return `<div class="ed">
+ <aside><div class="cap" style="margin-bottom:14px">Outline</div><div class="ol">${OL.map((o,i)=>`<button class="${o[1]} ${S.ol===i?'on':''}" data-a="ol" data-v="${i}">${o[0]}</button>`).join('')}</div>
+ <div class="cov"><b>Answer block coverage</b><span>${A(2)?'5':'4'} of 6 sections open with a direct, quotable answer.</span></div></aside>
+ <section class="doc"><div class="cap">Draft · V3 · Autosaved</div>
+  <h2 id="sec-h1">What is generative engine optimization?</h2>
+  <p class="lead" id="sec-lead">Generative engine optimization is the practice of structuring content so that answer engines quote it. Where search optimization competed for a ranked link, GEO competes for a sentence inside a generated answer.</p>
+  <div class="blk" id="sec-geo"><h3>GEO versus SEO</h3><p>${geo}</p></div>
+  <div class="blk" id="sec-pick"><h3>How engines pick sources</h3><p class="${A(0)?'hl':''}">${pick}</p></div>
+  <div class="blk" id="sec-check"><h3>A working checklist</h3><p>${chk}</p></div>
+  ${A(2)?`<div class="blk" id="sec-faq"><h3>Frequently asked questions</h3><p class="hl"><b>What is generative engine optimization?</b> Generative engine optimization is the practice of structuring content so that answer engines quote it inside the generated answers they give to buyers.</p></div>`:''}
+  <div class="foot"><button class="btn btn-p" data-a="go" data-v="score">Rescore draft</button><button class="btn btn-o" data-a="wp">Send to WordPress</button><div class="small">${S.acc.length} of 3 suggestions applied</div></div></section>
+ <aside><div class="stack g16">
+  <div class="live"><div class="top"><div class="cap">Live GEO score</div><div style="font-size:11px;opacity:.7">${S.acc.length?'up '+(sc-71)+' this session':'no change yet'}</div></div><div class="num"><b class="${pass?'pass':''}">${sc}</b><span>/ 100</span></div></div>
+  <div class="cap">AI suggestions</div>
+  ${SUG.map((g,i)=>{const on=A(i),off=S.dis.includes(i);return `<div class="sug ${on?'done':off?'off':''}"><div class="h"><span class="tag">${g.k}</span><span>+${g.imp} predicted</span></div><b>${g.t}</b><p>${typeof g.b==='function'?g.b():g.b}</p><div class="a"><button class="btn btn-p btn-s" data-a="apply" data-v="${i}"${on?' style="background:var(--green)"':''}>${on?'Applied':'Apply'}</button><button class="btn btn-o btn-s" data-a="dismiss" data-v="${i}">${off?'Dismissed':'Dismiss'}</button></div></div>`}).join('')}
+ </div></aside></div>`;
+}
+
+const DIMS=[['Quotability',84,'Most sections open with a liftable answer'],['Sourcing',58,'Two claims carry no attribution'],['Structure',88,'Clean heading hierarchy, FAQ schema present'],['Entity coverage',61,'Brand entity mentioned once'],['Freshness',76,'One 2024 statistic could be updated'],['Prompt fit',80,'Answers the target and 3 adjacent prompts']];
+function vScore(){
+ const sc=liveScore(),C=2*Math.PI*52,pass=sc>=75;
+ let viz='';
+ if(S.viz==='ring')viz=`<div class="stack" style="align-items:center;gap:24px"><div class="ring"><svg viewBox="0 0 120 120" width="208" height="208"><circle cx="60" cy="60" r="52" fill="none" stroke="rgba(244,244,245,.1)" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="#00E676" stroke-width="12" stroke-linecap="round" stroke-dasharray="${(C*sc/100).toFixed(1)} ${C.toFixed(1)}"/></svg><div class="c"><b class="${pass?'pass':''}">${sc}</b><span>GEO SCORE</span></div></div><p class="muted" style="text-align:center;font-size:13px;line-height:1.55;max-width:38ch">Strong on structure and sourcing. Held back by thin entity coverage and one unsupported claim.</p></div>`;
+ if(S.viz==='bars')viz=`<div class="stack" style="gap:20px">${DIMS.map(d=>{const c=d[1]<65?'#EF4444':d[1]<80?'#F59E0B':'#00E676';return `<div class="dim"><div class="sp" style="margin-bottom:9px"><b style="font-size:12px;font-weight:600">${d[0]}</b><b style="font-size:12px;color:${c}" class="mm">${d[1]}</b></div><div class="bar"><i style="width:${d[1]}%;background:${c}"></i></div><div class="small" style="margin-top:7px">${d[2]}</div></div>`}).join('')}</div>`;
+ if(S.viz==='grid'){
+  const R=[['Intro answer',92,78,88,70],['GEO vs SEO',84,66,74,58],['How engines pick',71,90,62,81],['Checklist',58,44,80,39],['FAQ',40,35,55,30]];
+  const cell=v=>{const a=v>=80?1:v>=65?.62:v>=50?.32:.12;return `<div style="background:${a===1?'#00E676':`rgba(0,230,118,${a})`};color:${a>=.62?'#0A0A0C':'#F4F4F5'}">${v}</div>`};
+  viz=`<div class="cap" style="margin-bottom:16px">Section by dimension</div><div class="heat"><div class="hh"></div>${['QUOTABILITY','SOURCING','STRUCTURE','ENTITIES'].map(h=>`<div class="hh">${h}</div>`).join('')}${R.map(r=>`<div class="rl" style="background:none">${r[0]}</div>${r.slice(1).map(cell).join('')}`).join('')}</div><div class="row small" style="margin-top:20px;gap:10px">Weak<span class="row" style="gap:3px">${[.12,.32,.62,1].map(a=>`<i style="display:block;width:22px;height:10px;border-radius:3px;background:rgba(0,230,118,${a})"></i>`).join('')}</span>Strong</div>`;
+ }
+ const R=[['SOURCING','red','+6 GEO · high confidence','Attribute the retrieval claim','Unsourced assertions are the single biggest reason passages get skipped during retrieval.','In our sample of 4,100 answers, 71 percent of cited passages ran under 60 words.'],['ENTITIES','','+5 GEO · high confidence','Name the brand entity twice more','Engines build confidence from repeated, consistent naming rather than pronouns.',CL()+' publishes its retention benchmarks quarterly.'],['STRUCTURE','mut','+4 GEO · medium','Add an answer block to the FAQ','The FAQ opens with context. Lead with the 25 word answer, then expand.','GEO is optimization for generated answers rather than ranked links.'],['FRESHNESS','mut','+2 GEO · low','Update the 2024 statistic','Engines discount figures older than 18 months when a newer equivalent exists.','Replace with the 2026 answer engine usage figure.']];
+ return `<div class="seg" style="margin-bottom:32px">${[['ring','Single dial'],['bars','Dimension bars'],['grid','Section heatmap']].map(t=>`<button class="${S.viz===t[0]?'on':''}" data-a="viz" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>
+ <div class="sg" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:32px;align-items:start"><section class="card pad32">${viz}</section>
+ <section><h2 class="t18" style="margin-bottom:6px">Recommendations</h2><p class="small" style="margin-bottom:20px;font-size:12px">Ordered by predicted lift in citation probability.</p><div class="stack" style="gap:14px">${R.map((r,i)=>`<div class="rec"><div class="row" style="gap:10px;margin-bottom:10px"><span class="tag ${r[1]}">${r[0]}</span><span class="small" style="font-weight:600">${r[2]}</span></div><b style="font-size:13px;line-height:1.45;display:block">${r[3]}</b><p class="muted" style="margin-top:8px;font-size:12px;line-height:1.55">${r[4]}</p><div class="snip">${r[5]}</div><button class="btn btn-p btn-s" style="margin-top:14px" data-a="recapply" data-v="${i}">${i<3&&S.acc.includes(i)?'Applied, open editor':'Apply in editor'}</button></div>`).join('')}</div></section></div>`;
+}
+
+const PROMPTS=[['what is generative engine optimization','Mechanics','Informational','3.1k',88],['how do answer engines choose sources','Mechanics','Informational','2.4k',24],['geo vs seo what is the difference','Comparison','Comparative','1.8k',61],['how to measure ai search visibility','Measurement','Practical','980',12],['best geo tools for b2b saas','Tools','Commercial','740',0],['does schema markup help geo','Mechanics','Technical','610',74],['why is my site not cited by chatgpt','Diagnostics','Troubleshooting','520',38],['geo checklist for content teams','Playbook','Practical','410',55],['how often do engines refresh sources','Mechanics','Technical','260',19]];
+const TPL=[['GEO','Standard GEO article','Full-length article optimised for AI citation with structured data, entity linking and source attribution.'],['Leadership','Executive thought piece','Opinion-driven article with a strong point of view, suited for LinkedIn and industry publications.'],['Technical','Technical deep-dive','In-depth explainer with code examples, architecture diagrams and benchmarking data.'],['Case study','Client success story','Problem, solution and result format with quantified outcomes and pull quotes.'],['SEO','SEO pillar page','Comprehensive topic page with internal linking, FAQ schema and topical clusters.'],['Social','LinkedIn carousel script','Slide-by-slide script with hooks, data points and a call to action.'],['GEO','Product comparison','Side-by-side analysis of competing solutions with citation-ready data tables.'],['Outreach','Outbound email sequence','Three-email sequence for executive outreach with signal-based personalisation hooks.']];
+function vPrompts(){
+ const cc=[['MECHANICS','14 / 18','Strongest cluster, 4 prompts open'],['COMPARISON','6 / 11','Competitor cited in 5 of the gaps'],['MEASUREMENT','3 / 9','Highest opportunity per ask'],['TOOLS','1 / 7','Commercial intent, unclaimed']];
+ const tabs=`<div class="seg" style="margin-bottom:28px">${[['clusters','Prompts and clusters'],['tpl','Templates']].map(t=>`<button class="${S.ptab===t[0]?'on':''}" data-a="ptab" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>`;
+ if(S.ptab==='tpl')return tabs+`<div class="tpl">${TPL.map(t=>`<button class="card" data-a="tpl" data-v="${t[1]}"><div class="cap" style="color:#8a6a2f">${t[0]}</div><b style="display:block;margin:6px 0 4px;font-size:13px">${t[1]}</b><span class="small" style="line-height:1.5;display:block">${t[2]}</span></button>`).join('')}</div>`;
+ return tabs+`<div class="cl4">${cc.map(c=>`<div class="card"><div class="cap">${c[0]}</div><b class="n mm">${c[1]}</b><div class="small" style="margin-top:8px">${c[2]}</div></div>`).join('')}</div>
+ <div class="tw"><div class="in" style="min-width:820px"><div class="th" style="grid-template-columns:2.6fr 1fr 1fr .8fr 1.1fr 70px"><div>Prompt</div><div>Cluster</div><div>Intent</div><div>Monthly asks</div><div>Your coverage</div><div></div></div>
+ ${PROMPTS.map((p,i)=>{const c=p[4]>=60?'#10B981':p[4]>=25?'#F59E0B':'#EF4444';const l=p[4]===0?'None':p[4]>=60?'Strong':p[4]>=25?'Partial':'Thin';return `<div class="tr" style="grid-template-columns:2.6fr 1fr 1fr .8fr 1.1fr 70px"><div class="n">${p[0]}</div><div style="font-size:11px;font-weight:600;color:var(--green)">${p[1]}</div><div class="muted" style="font-size:12px">${p[2]}</div><div style="font-size:12px;font-weight:600">${p[3]}</div><div class="row" style="gap:9px"><div class="bar" style="width:44px"><i style="width:${p[4]}%;background:${c}"></i></div><span style="font-size:11px;font-weight:600;color:${c}">${l}</span></div><div style="text-align:right"><button class="lnk" data-a="draftprompt" data-v="${i}">Draft</button></div></div>`}).join('')}</div></div>`;
+}
+
+function vPublish(){
+ const I=[['WordPress','W','northlinelegal.com · 2 authors',1,'Configure mapping'],['Webflow','Wf','Not connected',0,'Connect'],['HubSpot','H','Blog and campaign sync',1,'Configure mapping'],['Contentful','C','Not connected',0,'Connect'],['Schema injector','S','FAQ, Article, Organization',1,'Edit schema rules'],['Slack','Sl','#content-review approvals',1,'Edit notifications']];
+ const R=['Block publishing below GEO score 75','Require one human approval per article','Inject FAQ and Article schema on push','Auto publish approved drafts on schedule'];
+ const P=[['How answer engines select sources',86,'Oct 29',14],['Schema markup for citability',83,'Oct 24',10],['GEO vs SEO: what actually changed',79,'Oct 21',8],['The answer block pattern',82,'Oct 16',6],['From chatbot to co-pilot',77,'Oct 9',5]];
+ return `<div class="sg side"><section class="stack" style="gap:32px"><div><h2 class="t18" style="margin-bottom:20px">Destinations</h2><div class="int">${I.map(i=>`<div class="card"><div class="row"><div class="ini">${i[1]}</div><div style="flex:1;min-width:0"><b style="font-size:13px">${i[0]}</b><div class="small" style="margin-top:3px">${i[2]}</div></div><span class="tag ${i[3]?'':'mut'}">${i[3]?'CONNECTED':'AVAILABLE'}</span></div><button class="btn btn-o btn-s" style="width:100%;margin-top:16px;padding:9px" data-a="toast" data-v="Demo only: ${i[0]} settings are not editable here">${i[4]}</button></div>`).join('')}</div></div>
+ <div><h2 class="t18" style="margin-bottom:20px">Recently published</h2><div class="tw"><div class="in" style="min-width:560px"><div class="th" style="grid-template-columns:2.4fr .7fr .8fr .9fr"><div>Article</div><div>Score</div><div>Live since</div><div>Citations</div></div>${P.map(p=>`<div class="tr" style="grid-template-columns:2.4fr .7fr .8fr .9fr"><div class="n">${p[0]}</div><b style="color:${scoreCol(p[1])}">${p[1]}</b><div class="muted" style="font-size:12px">${p[2]}</div><div style="font-weight:600">${p[3]}</div></div>`).join('')}</div></div></div></section>
+ <aside class="card"><div class="cap">Publish rules</div><div class="stack" style="margin-top:18px;gap:14px">${R.map((r,i)=>`<button class="rule" data-a="rule" data-v="${i}" aria-pressed="${S.rules[i]}"><span class="cb ${S.rules[i]?'on':''}"></span><span>${r}</span></button>`).join('')}</div><div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(244,244,245,.1)"><b style="font-size:12px">Next scheduled push</b><div class="muted" style="margin-top:8px;font-size:12px">Thursday 09:00, 4 articles, WordPress plus schema injection.</div></div></aside></div>`;
+}
+
+const RNG={
+ '4w':{y:[52,58,61,74,79,88],m:[44,45,47,48,49,51],x:['Oct 6','Oct 12','Oct 17','Oct 23','Oct 28','Nov 3']},
+ '12w':{y:[21,26,24,33,38,42,51,58,62,74,88,101],m:[26,27,29,30,32,34,36,38,40,42,44,47],x:['Aug 18','Sep 1','Sep 15','Sep 29','Oct 13','Nov 3']},
+ '12m':{y:[8,14,19,24,31,38,44,52,61,73,86,104],m:[12,14,16,18,21,24,27,30,33,37,41,46],x:['Dec','Feb','Apr','Jun','Aug','Nov']}
+};
+function vAnalytics(){
+ const r=RNG[S.range],W=800,H=240,mx=120;
+ const pts=a=>a.map((v,i)=>`${(i*W/(a.length-1)).toFixed(1)},${(H-v/mx*H).toFixed(1)}`).join(' ');
+ const grid=[0,40,80,120].map(v=>`<line x1="0" x2="${W}" y1="${H-v/mx*H}" y2="${H-v/mx*H}" stroke="rgba(244,244,245,${v?.1:.2})" stroke-width="1" vector-effect="non-scaling-stroke"/>`).join('');
+ const last=r.y[r.y.length-1],ly=H-last/mx*H;
+ const C=[['how do answer engines choose sources','How answer engines select sources','Perplexity','2h ago'],['what is geo in marketing','What is generative engine optimization?','ChatGPT','5h ago'],['geo vs seo','GEO vs SEO: what actually changed','AI Overviews','Yesterday'],['does schema help ai search','Schema markup for citability','Claude','Yesterday'],['measure ai visibility b2b','Measuring AI search visibility','Perplexity','2d ago'],['generative engine optimization definition','What is generative engine optimization?','Copilot','3d ago']];
+ return `<div class="sg stats" style="margin-bottom:28px;gap:20px">${[['TOTAL AI CITATIONS','218','+38 this week'],['ENGINES CITING','6','ChatGPT, Perplexity, Gemini, Claude, Copilot, AI Overviews'],['TOP CITED ARTICLE','14','How answer engines select sources'],['CITATION GROWTH','+46%','vs previous 30 days']].map(s=>`<div class="card stat" style="padding:20px"><div class="cap">${s[0]}</div><div class="v" style="font-size:28px;margin-top:12px">${s[1]}</div><div class="d" style="margin-top:10px">${s[2]}</div></div>`).join('')}</div>
+ <section class="card" style="padding:28px;margin-bottom:28px"><div class="sp" style="margin-bottom:24px;flex-wrap:wrap"><h2 class="t16">Citations captured, ${S.range==='4w'?'last 4 weeks':S.range==='12w'?'last 12 weeks':'last 12 months'}</h2><div class="seg sm">${['4w','12w','12m'].map(t=>`<button class="${S.range===t?'on':''}" data-a="range" data-v="${t}">${t}</button>`).join('')}</div></div>
+ <div class="lc">${[0,40,80,120].map(v=>`<span class="yl" style="top:${100-v/mx*100}%">${v}</span>`).join('')}<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Citations over time">${grid}<polyline points="${pts(r.m)}" fill="none" stroke="rgba(244,244,245,.35)" stroke-width="2" stroke-dasharray="5 5" vector-effect="non-scaling-stroke"/><polyline points="${pts(r.y)}" fill="none" stroke="#00E676" stroke-width="2.5" vector-effect="non-scaling-stroke"/></svg></div>
+ <div class="xl">${r.x.map(x=>`<span>${x}</span>`).join('')}</div>
+ <div class="leg"><span><i></i>Your citations, latest ${last}</span><span><i style="background:rgba(244,244,245,.35);height:0;border-top:2px dashed rgba(244,244,245,.35)"></i>Category median, latest ${r.m[r.m.length-1]}</span></div></section>
+ <div class="sg split2"><section class="tw"><div style="padding:18px 24px;font-size:13px;font-weight:600;border-bottom:1px solid var(--line)">Recent citation log</div>${C.map(c=>`<div class="cit"><div><div style="font-size:12px;font-weight:600;line-height:1.4">${c[0]}</div><div class="small" style="margin-top:5px">${c[1]}</div></div><div style="flex:none;font-size:11px;font-weight:600;color:var(--green)">${c[2]}</div><div class="small" style="flex:none;width:64px;text-align:right">${c[3]}</div></div>`).join('')}</section>
+ <section class="card dark"><div class="cap">Headline</div><div style="margin-top:16px;font-size:32px;font-weight:700;line-height:1.15;letter-spacing:-.8px">Citations up <span style="color:var(--coral)">2.4x</span> since April</div><p style="margin:20px 0 0;font-size:13px;line-height:1.6;opacity:.85">Articles scoring above 80 are cited four times more often than those in the 60s. The queue now blocks publishing below 75.</p><div class="stack g12" style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.18)">${[['Articles above 80','17 of 41'],['Median time to first citation','9 days'],['Prompts newly owned','6 this month']].map(f=>`<div class="kv"><span style="opacity:.75">${f[0]}</span><span style="font-weight:600">${f[1]}</span></div>`).join('')}</div></section></div>`;
+}
+
+function vSettings(){
+ const G=['Never claim a number without a source','No product mentions before the final section','Flag any sentence over 30 words'];
+ const AL=['AI agents','enterprise AI','production-grade','measurable ROI','citation-ready'];
+ return `<div class="sg side s300"><section class="card pad32"><h2 class="t18" style="margin-bottom:24px">Brand voice</h2><div class="stack" style="gap:26px">
+ <div><label class="lbl" for="hdsc">House description</label><textarea class="txa" id="hdsc" rows="4" data-bind="desc" style="font-size:13px;line-height:1.6">${esc(S.desc)}</textarea></div>
+ ${[0,1,2,3].map(dialHtml).join('')}
+ <div><span class="lbl">Always use</span><div class="row wrap" style="gap:8px">${AL.map(w=>`<span class="ban ok">${w}</span>`).join('')}</div></div>
+ <div><span class="lbl">Never use</span><div class="row wrap" style="gap:8px">${S.ban.map((w,i)=>`<span class="ban">${w}<button data-a="unban" data-v="${i}" aria-label="Remove ${w}">&times;</button></span>`).join('')||'<span class="small">No banned words.</span>'}</div>
+ <div class="row" style="gap:8px;margin-top:12px;max-width:340px"><input class="inp" id="banin" style="padding:9px 12px;font-size:12px" placeholder="Add a word or phrase" aria-label="Banned word"><button class="btn btn-o btn-s" data-a="banadd">Add</button></div></div></div></section>
+ <aside class="stack g16"><div class="card"><div class="cap">Sample sentence</div><p style="margin-top:14px;font-size:13px;line-height:1.6">${S.dials[3]<40?'Answer engines cite sources that state a position in one sentence. Most B2B blogs take four paragraphs to get there.':S.dials[3]<70?'Answer engines cite sources that state a position in one clear sentence, while most B2B blogs need four paragraphs of context before they reach it.':'Answer engines tend to cite the sources that commit to a position early and in a single sentence, whereas most B2B blogs spend four paragraphs on context before arriving at theirs.'}</p><div class="small" style="margin-top:16px">Regenerated from your current dials.</div></div>
+ <div class="card"><div class="cap">Guardrails</div><div class="stack" style="margin-top:16px;gap:12px">${G.map((g,i)=>`<button class="rule" data-a="guard" data-v="${i}" aria-pressed="${S.guard[i]}"><span class="cb ${S.guard[i]?'on':''}"></span><span>${g}</span></button>`).join('')}</div></div></aside></div>`;
+}
+
+const TEAM=[['JC','James Chen','james.chen@company.com','Admin',1],['SN','Sofia Nascimento','sofia.n@company.com','Admin',1],['AO','Amara Okafor','amara.o@company.com','Editor',0],['TW','Thomas Weber','thomas.w@company.com','Editor',0],['PK','Priya Krishnamurthy','priya.k@company.com','Editor',1],['LM','Lucas Moreau','lucas.m@company.com','Editor',0],['YT','Yuki Tanaka','yuki.t@company.com','Editor',0],['RJ','Rachel Johnson','rachel.j@company.com','Editor',0],['KA','Kofi Asante','kofi.a@company.com','Editor',0],['EM','Elena Martinez','elena.m@company.com','Editor',0]];
+function vTeam(){
+ return `<div class="sg split" style="align-items:start"><section class="card"><div class="cap" style="margin-bottom:8px">Members · ${TEAM.length}</div>${TEAM.map(m=>`<div class="mrow"><div class="av ${m[4]?'on':''}">${m[0]}</div><div class="i"><b>${m[1]}</b><span class="small" style="overflow-wrap:anywhere">${m[2]}</span></div><select aria-label="Role for ${m[1]}"><option${m[3]==='Admin'?' selected':''}>Admin</option><option${m[3]==='Editor'?' selected':''}>Editor</option></select></div>`).join('')}</section>
+ <section class="card"><div class="cap">Invite member</div><div class="stack" style="margin-top:16px;gap:12px"><input class="inp" id="inv" type="email" style="font-size:13px" placeholder="colleague@company.com" aria-label="Email"><select class="sel" aria-label="Role"><option>Editor</option><option>Admin</option></select><button class="btn btn-p" data-a="toast" data-v="Demo only: invites are not sent">Send invite</button></div><p class="hint" style="line-height:1.5">Editors can generate, draft and manage the queue. Admins can also edit brand voice, publish to the CMS and manage the team.</p></section></div>`;
+}
+function vUsage(){
+ const SP=[['Oct 5',.02],['Oct 8',.04],['Oct 10',.06],['Oct 12',.03],['Oct 15',.09],['Oct 17',.07],['Oct 20',.12],['Oct 22',.04],['Oct 25',.26],['Oct 28',.08],['Oct 30',.16]],mx=.28;
+ const FT=[['Illustration (Claude)',20,'69.5K','$0.41',42],['AI article edits',26,'84.9K','$0.24',25],['Article outline',143,'421.8K','$0.16',16],['Article draft',24,'112.0K','$0.10',10],['Illustration (OpenAI)',3,'5.1K','$0.03',3],['Citation weave',4,'3.8K','$0.01',1],['fix-section',33,'19.8K','<$0.01',1],['auto-citation',16,'11.9K','<$0.01',1],['brief-chat',10,'11.7K','<$0.01',0],['fix-geo-v2',6,'11.4K','<$0.01',0]];
+ return `<div class="small" style="margin-bottom:14px">Last refreshed 10:48 PM, Nov 3 2026</div>
+ <div class="sg stats" style="margin-bottom:28px;gap:20px">${[['ESTIMATED SPEND','$0.97','Last 30 days'],['TOTAL TOKENS','752.6K','443.1K in · 309.5K out'],['API CALLS','287','Logged requests'],['AVG COST PER ARTICLE','$0.04','Across 24 articles']].map(s=>`<div class="card stat" style="padding:20px"><div class="cap">${s[0]}</div><div class="v" style="font-size:28px;margin-top:12px">${s[1]}</div><div class="d" style="margin-top:10px">${s[2]}</div></div>`).join('')}</div>
+ <section class="card" style="margin-bottom:28px"><div class="sp" style="margin-bottom:24px"><h2 class="t16">Daily spend, last 30 days</h2><span class="small">Peak $0.26 on Oct 25</span></div><div class="bc" style="margin-bottom:26px">${SP.map(s=>`<div><i class="${s[1]===.26?'pk':''}" style="height:${s[1]/mx*100}%" title="$${s[1].toFixed(2)}"></i><span>${s[0]}</span></div>`).join('')}</div></section>
+ <section class="tw" style="margin-bottom:28px"><div style="padding:18px 24px;font-size:13px;font-weight:600;border-bottom:1px solid var(--line)">Cost by feature</div><div class="in" style="min-width:600px"><div class="th" style="grid-template-columns:2fr .6fr .8fr .8fr 1.2fr"><div>Feature</div><div style="text-align:right">Calls</div><div style="text-align:right">Tokens</div><div style="text-align:right">Est. cost</div><div>Share</div></div>${FT.map(f=>`<div class="tr" style="grid-template-columns:2fr .6fr .8fr .8fr 1.2fr;padding-block:11px"><div style="font-size:12px;font-weight:600;color:var(--green)">${f[0]}</div><div style="text-align:right">${f[1]}</div><div style="text-align:right">${f[2]}</div><div style="text-align:right;font-weight:600">${f[3]}</div><div class="row" style="gap:8px"><div class="bar" style="width:70px;height:4px"><i style="width:${Math.max(f[4],2)}%;background:#00E676"></i></div><span class="small">${f[4]}%</span></div></div>`).join('')}</div></section>
+ <section class="card"><div class="cap" style="margin-bottom:14px">Monthly budget</div><div class="row wrap" style="gap:24px"><div style="flex:1;min-width:220px"><b style="font-size:13px">API call limit</b><div class="small" style="margin:4px 0 10px">The sidebar bar fills as calls approach this number.</div><div class="bar" style="height:4px"><i style="width:9.6%;background:#00E676"></i></div><div class="small" style="margin-top:6px;text-align:right">287 / 3,000 calls</div></div><div class="row" style="gap:8px"><input class="inp" style="width:90px;padding:9px 12px;font-size:13px" value="3000" aria-label="Call limit"><button class="btn btn-p" data-a="toast" data-v="Demo only: budget saved locally">Save</button></div></div></section>`;
+}
+function vTrash(){
+ return `<section class="card"><div class="cap" style="margin-bottom:8px">Deleted · 2</div>${[['Draft: Why RAG is not enough (early outline)','Oct 18'],['Test: Prompt iteration benchmark v1','Oct 12']].map(t=>`<div class="mrow trash"><div class="i"><b>${t[0]}</b><span class="small">Deleted ${t[1]}</span></div><span class="pill warn">Deleted</span><button class="btn btn-o btn-s" data-a="toast" data-v="Demo only: restore is disabled">Restore</button></div>`).join('')}</section>`;
+}
+
+const VIEWS={dashboard:vDash,generate:vGenerate,queue:vQueue,editor:vEditor,score:vScore,keywords:vPrompts,publish:vPublish,analytics:vAnalytics,settings:vSettings,team:vTeam,usage:vUsage,trash:vTrash};
+
+/* ---------- render ---------- */
+function render(){
+ const h=HEAD[S.screen];
+ $('#hd').innerHTML=`<div><div class="eb">${h[0]}</div><h1>${h[1]}</h1><p>${h[2]}</p></div>`;
+ $('#nav').innerHTML=NAV.map(n=>typeof n==='string'?`<div class="nsec">${n}</div>`:`<button class="ni ${S.screen===n[0]?'on':''}" data-a="go" data-v="${n[0]}"><svg viewBox="0 0 20 20" fill="currentColor"><path d="${n[2]}"/></svg><span>${n[1]}</span>${n[0]==='queue'?`<em>${S.queue.length}</em>`:''}</button>`).join('');
+ $('#cl').textContent=CL();
+ $('#view').innerHTML=VIEWS[S.screen]();
+ const m=$('#msgs');if(m)m.scrollTop=m.scrollHeight;
+}
+let tt;
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),2400)}
+function go(s,keep){S.screen=s;closeMenu();render();if(!keep)window.scrollTo(0,0);history.replaceState(null,'',s==='dashboard'?location.pathname:'#'+s)}
+function closeMenu(){$('#sb').classList.remove('open');$('#ov').classList.remove('open')}
+
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-a]');if(!t)return;
+ const a=t.dataset.a,v=t.dataset.v;
+ switch(a){
+  case 'menu':$('#sb').classList.toggle('open');$('#ov').classList.toggle('open');break;
+  case 'go':go(v);break;
+  case 'client':S.client=(S.client+1)%CLIENTS.length;render();toast('Switched workspace to '+CL());break;
+  case 'flow':S.flow=v;render();break;
+  case 'step':S.step=+v;render();break;
+  case 'next':S.step=Math.min(4,S.step+1);render();break;
+  case 'prev':S.step=Math.max(1,S.step-1);render();break;
+  case 'adj':S.adj=tgl(S.adj,+v);render();break;
+  case 'tog':S.tog=tgl(S.tog,+v);render();break;
+  case 'viz':S.viz=v;render();break;
+  case 'range':S.range=v;render();break;
+  case 'ptab':S.ptab=v;render();break;
+  case 'qsel':S.sel=tgl(S.sel,+v);render();break;
+  case 'bulk':toast(v+' applied to '+S.sel.length+' prompts (demo)');break;
+  case 'run':{
+    S.queue.unshift({id:++S.nid,p:S.flow==='wizard'||S.flow==='chat'?S.promptText:'new article from brief',c:'Mechanics',st:'Queued',pct:0});
+    S.sel=[S.nid];S.screen='queue';render();window.scrollTo(0,0);toast('Added to batch 041. Estimated 4 minutes.');break;}
+  case 'draftgap':{const g=['how do answer engines choose which sources to cite','geo vs seo what is the difference','how to measure ai search visibility','best geo tools for b2b saas'];S.promptText=g[+v];S.flow='wizard';S.step=1;go('generate');break;}
+  case 'draftprompt':S.promptText=PROMPTS[+v][0];S.flow='wizard';S.step=1;go('generate');break;
+  case 'tpl':S.flow='single';S.brief='Use the "'+v+'" template. '+S.brief;go('generate');toast('Template loaded: '+v);break;
+  case 'apply':{const i=+v;if(!S.acc.includes(i))S.acc.push(i);S.dis=S.dis.filter(x=>x!==i);S.ol=i===2?5:S.ol;render();toast('Applied: +'+SUG[i].imp+' predicted. Score is '+liveScore()+'.');break;}
+  case 'dismiss':{const i=+v;S.dis=tgl(S.dis,i);S.acc=S.acc.filter(x=>x!==i);render();break;}
+  case 'recapply':{const i=+v;if(i<3&&!S.acc.includes(i))S.acc.push(i);go('editor');if(i<3)toast('Applied in editor: +'+SUG[i].imp+' predicted');break;}
+  case 'ol':{S.ol=+v;if(+v===5&&!S.acc.includes(2)){render();toast('FAQ is thin. Apply the structure suggestion to fix it.');break;}render();const el=document.getElementById(DOCIDS[+v]);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});break;}
+  case 'wp':liveScore()<75?toast('Blocked: GEO score '+liveScore()+' is below the publish gate of 75.'):toast('Sent to WordPress (demo). Schema injected.');break;
+  case 'rule':S.rules[+v]=!S.rules[+v];render();break;
+  case 'guard':S.guard[+v]=!S.guard[+v];render();break;
+  case 'unban':S.ban.splice(+v,1);render();break;
+  case 'banadd':{const i=$('#banin');const w=i.value.trim();if(w&&!S.ban.includes(w)){S.ban.push(w);render();}break;}
+  case 'kw':{const k=t.dataset.k;S.kw=tgl(S.kw,k);render();break;}
+  case 'kwadd':{const i=$('#kwin');const w=i.value.trim();if(w&&!S.custom.includes(w)){S.custom.push(w);S.kw.push(w);render();}break;}
+  case 'kwuse':if(!S.kw.length)break;S.promptText=S.kw[0];S.adj=[];S.flow='wizard';S.step=1;go('generate');toast(S.kw.length+' keywords sent to the wizard');break;
+  case 'chipfill':S.chatInput=v;render();break;
+  case 'send':{const t=S.chatInput.trim();if(!t)break;const R=['Noted. I will keep the definition to one sentence and add the comparison table after it.',CL()+' is not cited for that prompt in Gemini yet. I can open every section with an answer block.','Updated the brief. Predicted GEO score is now 84.'];S.msgs.push(['u',t],['a',R[(S.msgs.length/2|0)%3]]);S.chatInput='';render();break;}
+  case 'toast':toast(v);break;
+ }
+});
+document.addEventListener('input',e=>{
+ const t=e.target;
+ if(t.dataset.bind)S[t.dataset.bind]=t.value;
+ if(t.dataset.dial!==undefined){const i=+t.dataset.dial;S.dials[i]=+t.value;document.querySelectorAll('[data-dv="'+i+'"]').forEach(x=>x.textContent=dword(i,S.dials[i]));}
+});
+document.addEventListener('keydown',e=>{
+ if(e.key!=='Enter')return;
+ const id=e.target.id;
+ if(id==='ci')document.querySelector('[data-a="send"]').click();
+ if(id==='kwin')document.querySelector('[data-a="kwadd"]').click();
+ if(id==='banin')document.querySelector('[data-a="banadd"]').click();
+});
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(VIEWS[h]&&h!==S.screen){S.screen=h;render();}});
+(function(){const h=location.hash.slice(1);if(VIEWS[h])S.screen=h;render();})();
+</script>
+
+</body></html>
